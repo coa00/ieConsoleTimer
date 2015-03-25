@@ -1,13 +1,13 @@
 /**
- * conosle.logger For IE6,7 etc..
+ * IEなどconsole.logが使えない場合はHTML上にログを履く。
  */
 
 (function(){
 
 
-    if (window.console === undefined)
+    if (!this.console || !window.console)
     {
-        window.conole = {};
+        window.console = {};
 
         var div = document.createElement('div');
         div.setAttribute('id','d-log');
@@ -22,26 +22,34 @@
         var body = document.getElementsByTagName("body").item(0);
         body.appendChild(div);
 
-        console.log = function(value){
-            div.innerHTML += value + "</br>";
-        }
+        window.console.log = function(value){
+            var html = "";
+            var i= 0;
 
-        console.error = function(value){
-            div.innerHTML += value + "</br>";
-        }
+            for(i;i<arguments.length;i++)
+            {
+                html += arguments[i];
+            }
 
-        console.time = function(key){
-            var time = (window.time || (window.time = {}));
-            time[key] = new Date();
-        }
+            div.innerHTML += html + "</br>";
+        };
 
-        console.timeEnd = function(key){
-            var time = (window.time || (window.time = {}));
+        window.console.error = window.console.log;
 
-            var processTime = new Date() - time[key];
+        window.console.time = function(key){
+            window.time || (window.time = {});
 
-            console.log(processTime);
-        }
+            window.time[key] = new Date().getTime();
+        };
+
+        window.console.timeEnd = function(key){
+            window.time || (window.time = {});
+
+            var processTime = +new Date() - window.time[key];
+            window.console.log("Time " + key + ":" + processTime + "msec");
+
+            delete window.time[key];
+        };
 
     }
 
