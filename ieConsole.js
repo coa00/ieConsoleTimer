@@ -37,7 +37,7 @@
     /**
      *  console.error For not implemented　Browser
      */
-    if (window.console.error){
+    if (!window.console.error){
         window.console.error = window.console.log;
     }
 
