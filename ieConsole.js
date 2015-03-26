@@ -1,10 +1,9 @@
-/**
- * IEなどconsole.logが使えない場合はHTML上にログを履く。
- */
 
 (function(){
 
-
+    /**
+     *  console.logger For not implemented　Browser
+     */
     if (!this.console || !window.console)
     {
         window.console = {};
@@ -33,9 +32,20 @@
 
             div.innerHTML += html + "</br>";
         };
+    }
 
+    /**
+     *  console.error For not implemented　Browser
+     */
+    if (window.console.error){
         window.console.error = window.console.log;
+    }
 
+    /**
+     *  console.timer For not implemented　Browser
+     */
+    if (!window.console.time)
+    {
         window.console.time = function(key){
             window.time || (window.time = {});
 
@@ -50,7 +60,5 @@
 
             delete window.time[key];
         };
-
     }
-
 })(this);
